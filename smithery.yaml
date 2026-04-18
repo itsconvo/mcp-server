@@ -1,0 +1,19 @@
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    required:
+      - convoApiKey
+    properties:
+      convoApiKey:
+        type: string
+        title: Convo API Key
+        description: Your Convo API key (starts with convo_). Get one from your Convo dashboard settings. Requires Starter plan or above.
+  commandFunction: |-
+    (config) => ({
+      command: 'node',
+      args: ['dist/index.js'],
+      env: {
+        CONVO_API_KEY: config.convoApiKey
+      }
+    })
