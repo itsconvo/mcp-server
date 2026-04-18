@@ -1,6 +1,6 @@
 # Convo MCP Server
 
-Access your [Convo](https://www.itsconvo.com) meetings from any AI assistant that supports MCP (Claude, ChatGPT, Cursor, and more). Not just a data wrapper. Meeting intelligence that helps you prepare, follow up, and stay on top of everything.
+Access your [Convo](https://www.itsconvo.com) meetings from any AI assistant that supports MCP (Claude, ChatGPT, Cursor, and more). Meeting intelligence that helps you prepare, follow up, and stay on top of everything.
 
 ## What you can do
 
