@@ -25,7 +25,7 @@ Access your [Convo](https://www.itsconvo.com) meetings from any AI assistant tha
 
 ### 1. Get your API key
 
-Go to your [Convo dashboard settings](https://www.itsconvo.com) and create an API key. You need a Starter plan or above.
+Download the [Convo app](https://www.itsconvo.com), open the dashboard, and go to Settings to create an API key. You need a Starter plan or above.
 
 ### 2. Install
 
@@ -120,11 +120,11 @@ Add to your Cursor MCP settings:
 ## Requirements
 
 - Convo account with Starter plan or above
-- API key from your Convo dashboard
+- API key from your Convo app (Settings > API Keys)
 - Node.js 18+
 
 ## Links
 
 - [Convo](https://www.itsconvo.com)
 - [API Documentation](https://docs.itsconvo.com)
-- [OpenAPI Spec](https://docs.itsconvo.com/openapi.json)
+- [OpenAPI Spec](https://www.itsconvo.com/openapi.json)
