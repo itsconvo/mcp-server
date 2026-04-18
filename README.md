@@ -1,6 +1,6 @@
 # Convo MCP Server
 
-Access your [Convo](https://www.itsconvo.com) meetings from any LLM that supports MCP (Claude, ChatGPT, Cursor, and more). Meeting intelligence that helps you prepare, follow up, and stay on top of everything.
+Access your [Convo](https://www.itsconvo.com) meetings from any large language model (LLM) that supports MCP (Claude, ChatGPT, Cursor, and more). Meeting intelligence that helps you prepare, follow up, and stay on top of everything.
 
 ## What you can do
 
