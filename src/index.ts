@@ -15,7 +15,7 @@ const client = new ConvoClient(apiKey);
 
 const server = new McpServer({
   name: "Convo",
-  version: "1.0.2",
+  version: "1.0.3",
 });
 
 const readOnly = { readOnlyHint: true, destructiveHint: false, openWorldHint: false };
