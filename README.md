@@ -1,6 +1,6 @@
 # Convo MCP Server
 
-Access your [Convo](https://www.itsconvo.com) meetings from any large language model (LLM) that supports MCP (Claude, ChatGPT, Cursor, and more). Meeting intelligence that helps you prepare, follow up, and stay on top of everything.
+Access your [Convo](https://www.itsconvo.com) meetings from any AI assistant that supports MCP (Claude, ChatGPT, Cursor, and more). Not just a data wrapper. Cross-meeting intelligence that helps you prepare, follow up, and stay on top of everything.
 
 ## What you can do
 
@@ -81,23 +81,23 @@ Add to your Cursor MCP settings:
 
 | Tool | Description |
 |------|-------------|
-| `list_meetings` | List and search your meetings |
-| `get_transcript` | Get full meeting transcript |
-| `get_summary` | Get key points, decisions, action items |
-| `get_feedback` | Get coaching feedback and scores |
-| `ask_about_meeting` | Ask any question about a meeting |
-| `draft_followup_email` | Generate a follow-up email |
-| `share_meeting` | Create a shareable meeting link |
-| `get_upcoming_meetings` | View upcoming calendar events |
-| `get_account_info` | Check your plan and API usage |
+| `meetings.list` | List and search your meetings |
+| `meetings.get_transcript` | Get full meeting transcript |
+| `meetings.get_summary` | Get key points, decisions, action items |
+| `meetings.get_feedback` | Get coaching feedback and scores |
+| `meetings.ask` | Ask any question about a meeting |
+| `meetings.draft_email` | Generate a follow-up email |
+| `meetings.share` | Create a shareable meeting link |
+| `calendar.upcoming` | View upcoming calendar events |
+| `account.info` | Check your plan and API usage |
 
 ### Cross-Meeting Intelligence
 
 | Tool | Description |
 |------|-------------|
-| `prepare_for_meeting` | Get a briefing from all past meetings with a person or company |
-| `weekly_digest` | Consolidated digest of all meetings over a time period |
-| `find_action_items` | Find all action items across meetings, filter by owner |
+| `intelligence.prepare` | Get a briefing from all past meetings with a person or company |
+| `intelligence.weekly_digest` | Consolidated digest of all meetings over a time period |
+| `intelligence.find_action_items` | Find all action items across meetings, filter by owner |
 
 ### Prompts
 

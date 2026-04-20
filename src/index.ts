@@ -14,9 +14,11 @@ if (!apiKey) {
 const client = new ConvoClient(apiKey);
 
 const server = new McpServer({
-  name: "convo",
-  version: "1.0.0",
+  name: "Convo",
+  version: "1.0.2",
 });
+
+const readOnly = { readOnlyHint: true, destructiveHint: false, openWorldHint: false };
 
 // --- Helpers ---
 
@@ -50,13 +52,14 @@ function daysAgo(n: number): string {
 // --- Core Tools ---
 
 server.tool(
-  "list_meetings",
+  "meetings.list",
   "List your recent meetings. Search by title or filter by date.",
   {
     limit: z.number().min(1).max(100).optional().describe("Max results (default 20)"),
     search: z.string().optional().describe("Search meetings by title"),
     since: z.string().optional().describe("Only meetings after this date (ISO 8601)"),
   },
+  readOnly,
   async ({ limit, search, since }) => {
     try {
       const result = await client.listConversations({ limit, search, since });
@@ -68,11 +71,12 @@ server.tool(
 );
 
 server.tool(
-  "get_transcript",
+  "meetings.get_transcript",
   "Get the full transcript of a meeting with speaker names and timestamps.",
   {
     meeting_id: z.string().describe("The meeting/conversation ID"),
   },
+  readOnly,
   async ({ meeting_id }) => {
     try {
       const result = await client.getTranscript(meeting_id);
@@ -84,11 +88,12 @@ server.tool(
 );
 
 server.tool(
-  "get_summary",
+  "meetings.get_summary",
   "Get the summary of a meeting including key points, decisions, and action items. Generates automatically if not yet available.",
   {
     meeting_id: z.string().describe("The meeting/conversation ID"),
   },
+  readOnly,
   async ({ meeting_id }) => {
     try {
       const result = await client.getKeypoints(meeting_id);
@@ -108,11 +113,12 @@ server.tool(
 );
 
 server.tool(
-  "get_feedback",
+  "meetings.get_feedback",
   "Get AI coaching feedback for a meeting: communication score, strengths, growth areas, and talk-to-listen ratio. Generates automatically if not yet available.",
   {
     meeting_id: z.string().describe("The meeting/conversation ID"),
   },
+  readOnly,
   async ({ meeting_id }) => {
     try {
       const result = await client.getFeedback(meeting_id);
@@ -132,12 +138,13 @@ server.tool(
 );
 
 server.tool(
-  "ask_about_meeting",
+  "meetings.ask",
   "Ask any question about a specific meeting. The AI will answer based on the transcript.",
   {
     meeting_id: z.string().describe("The meeting/conversation ID"),
     question: z.string().max(500).describe("Your question about the meeting"),
   },
+  readOnly,
   async ({ meeting_id, question }) => {
     try {
       const result = await client.queryConversation(meeting_id, question);
@@ -149,13 +156,14 @@ server.tool(
 );
 
 server.tool(
-  "draft_followup_email",
+  "meetings.draft_email",
   "Draft a follow-up email based on a meeting. References actual discussion points.",
   {
     meeting_id: z.string().describe("The meeting/conversation ID"),
     recipient_name: z.string().optional().describe("Name of the email recipient"),
     tone: z.enum(["professional", "casual", "concise"]).optional().describe("Email tone (default: professional)"),
   },
+  readOnly,
   async ({ meeting_id, recipient_name, tone }) => {
     try {
       const result = await client.generateEmail(meeting_id, {
@@ -170,11 +178,12 @@ server.tool(
 );
 
 server.tool(
-  "share_meeting",
+  "meetings.share",
   "Generate a shareable link for a meeting.",
   {
     meeting_id: z.string().describe("The meeting/conversation ID"),
   },
+  readOnly,
   async ({ meeting_id }) => {
     try {
       const result = await client.shareConversation(meeting_id);
@@ -186,11 +195,12 @@ server.tool(
 );
 
 server.tool(
-  "get_upcoming_meetings",
+  "calendar.upcoming",
   "Get upcoming meetings from your connected Google Calendar.",
   {
     max_results: z.number().min(1).max(50).optional().describe("Max events to return (default 10)"),
   },
+  readOnly,
   async ({ max_results }) => {
     try {
       const result = await client.getCalendarEvents({ maxResults: max_results });
@@ -202,9 +212,10 @@ server.tool(
 );
 
 server.tool(
-  "get_account_info",
+  "account.info",
   "Get your Convo account info including subscription tier and API usage stats.",
   {},
+  readOnly,
   async () => {
     try {
       const result = await client.getProfile();
@@ -218,12 +229,13 @@ server.tool(
 // --- Cross-Meeting Intelligence Tools ---
 
 server.tool(
-  "prepare_for_meeting",
+  "intelligence.prepare",
   "Prepare a briefing for an upcoming meeting. Searches past meetings with a person or company, pulls summaries and open action items, and returns a consolidated briefing so you show up prepared.",
   {
     search: z.string().describe("Person name, company name, or topic to search past meetings for"),
     max_past_meetings: z.number().min(1).max(20).optional().describe("How many past meetings to look back through (default 10)"),
   },
+  readOnly,
   async ({ search, max_past_meetings }) => {
     try {
       const limit = max_past_meetings || 10;
@@ -291,11 +303,12 @@ server.tool(
 );
 
 server.tool(
-  "weekly_digest",
+  "intelligence.weekly_digest",
   "Get a consolidated digest of all your meetings over a time period. Includes total meeting time, all decisions made, all action items, and per-meeting summaries.",
   {
     days: z.number().min(1).max(90).optional().describe("Number of days to look back (default 7)"),
   },
+  readOnly,
   async ({ days }) => {
     try {
       const since = daysAgo(days || 7);
@@ -363,12 +376,13 @@ server.tool(
 );
 
 server.tool(
-  "find_action_items",
+  "intelligence.find_action_items",
   "Find all action items across your recent meetings. Shows who owns each item, priority, and which meeting it came from.",
   {
     days: z.number().min(1).max(90).optional().describe("Number of days to look back (default 14)"),
     owner: z.string().optional().describe("Filter action items by owner name"),
   },
+  readOnly,
   async ({ days, owner }) => {
     try {
       const since = daysAgo(days || 14);
@@ -435,7 +449,7 @@ server.prompt(
         role: "user",
         content: {
           type: "text",
-          text: `I have an upcoming meeting related to "${name}". Please use the prepare_for_meeting tool to search for past meetings and give me a concise briefing. Include:\n\n1. A summary of our history (what we've discussed before)\n2. Any open action items I should follow up on\n3. Key decisions we've made in the past\n4. Suggested talking points for the upcoming meeting\n\nKeep it concise and actionable.`,
+          text: `I have an upcoming meeting related to "${name}". Please use the intelligence.prepare tool to search for past meetings and give me a concise briefing. Include:\n\n1. A summary of our history (what we've discussed before)\n2. Any open action items I should follow up on\n3. Key decisions we've made in the past\n4. Suggested talking points for the upcoming meeting\n\nKeep it concise and actionable.`,
         },
       },
     ],
@@ -452,7 +466,7 @@ server.prompt(
         role: "user",
         content: {
           type: "text",
-          text: `Please use the weekly_digest tool to get all my meetings from the last 7 days. Then give me:\n\n1. A brief overview of my week (total meetings, total time)\n2. The most important decisions made across all meetings\n3. All open action items grouped by owner\n4. Any patterns you notice (too many meetings? recurring topics?)\n\nBe concise.`,
+          text: `Please use the intelligence.weekly_digest tool to get all my meetings from the last 7 days. Then give me:\n\n1. A brief overview of my week (total meetings, total time)\n2. The most important decisions made across all meetings\n3. All open action items grouped by owner\n4. Any patterns you notice (too many meetings? recurring topics?)\n\nBe concise.`,
         },
       },
     ],
@@ -471,7 +485,7 @@ server.prompt(
         role: "user",
         content: {
           type: "text",
-          text: `Please help me catch up on follow-ups. Use list_meetings to find all my meetings from the last ${days || "3"} days. For each meeting, check if it has a summary (use get_summary). For meetings that have summaries with action items, use draft_followup_email to draft a follow-up email. Present each draft so I can review and send them.`,
+          text: `Please help me catch up on follow-ups. Use meetings.list to find all my meetings from the last ${days || "3"} days. For each meeting, check if it has a summary (use meetings.get_summary). For meetings that have summaries with action items, use meetings.draft_email to draft a follow-up email. Present each draft so I can review and send them.`,
         },
       },
     ],

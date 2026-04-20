@@ -1,6 +1,6 @@
 {
   "name": "@itsconvo/mcp-server",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "MCP server for Convo — AI meeting assistant. Access your meetings, transcripts, summaries, and action items from any AI assistant.",
   "main": "dist/index.js",
   "bin": {
